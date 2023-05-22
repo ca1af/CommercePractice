@@ -1,6 +1,5 @@
 package com.example.commerce.auth.jwt;
 
-import com.example.commerce.auth.userDetails.UserDetailsImpl;
 import com.example.commerce.auth.userDetails.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import jakarta.servlet.FilterChain;
@@ -31,6 +30,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throw new RuntimeException();
         }
 
+        setAuthentication(request, accessToken);
+
         filterChain.doFilter(request, response);
     }
 
@@ -40,7 +41,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             UserDetails userDetails = userDetailsImpl.loadUserByUsername(email);
             Authentication authentication = jwtProvider.createAuthentication(userDetails);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
         } catch (JwtException e) {
             request.setAttribute("exception", e.getMessage());
         }

@@ -1,5 +1,8 @@
 package com.example.commerce.auth.config;
 
+import com.example.commerce.auth.jwt.JwtAuthFilter;
+import com.example.commerce.auth.jwt.JwtProvider;
+import com.example.commerce.auth.userDetails.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +29,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 // springframework scheduling
 @EnableScheduling
 public class WebSecurityConfig implements WebMvcConfigurer {
+
+    private final JwtProvider jwtProvider;
+
+    private final UserDetailsServiceImpl userDetailsService;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -47,6 +54,8 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 .requestMatchers("/api/users/kakao**").permitAll()
                 .anyRequest().authenticated()
         );
+
+        http.addFilterBefore(new JwtAuthFilter(jwtProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class);
 
 //        http.addFilterBefore();
 

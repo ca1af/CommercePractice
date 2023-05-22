@@ -1,5 +1,6 @@
 package com.example.commerce.user.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +12,8 @@ public class UserRequest {
     private String password;
     private String phoneNumber;
 
-    // 회원가입 시 사용
+    // 회원가입 시 사용 + Test시
+    @Builder
     public UserRequest(String userName, String email, String password, String phoneNumber) {
         this.userName = userName;
         this.email = email;
